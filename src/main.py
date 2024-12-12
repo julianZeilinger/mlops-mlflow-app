@@ -8,6 +8,9 @@ from evaluate import evaluate_model
 
 
 def main():
+    print("MLflow Version:", mlflow.version.VERSION)
+    print(mlflow.get_tracking_uri())
+    print(mlflow.active_run())
     if mlflow.active_run():
         print(f"Ending stale run: {mlflow.active_run().info.run_id}")
         mlflow.end_run()
