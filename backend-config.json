@@ -1,5 +1,6 @@
 {
   "kube-context": "mlops-test-admin@mlops-test",
   "kube-job-template-path": "mlflow_job_template.yaml",
-  "kube-namespace": "mlflow"
+  "kube-namespace": "mlflow",
+  "repository-uri": "julianzeilinger/mlflow-test"
 }
