@@ -3,20 +3,9 @@ set -e
 
 dvc pull
 
-steps=("data_validation" "preprocessing" "feature_engineering" "hyperparameter_tuning" "training" "evaluation")
-failed_steps=()
-
-for step in "${steps[@]}"; do
-    echo "Running step: $step"
-    if ! mlflow run . -e "$step" --env-manager=local; then
-        echo "Step $step failed!"
-        failed_steps+=("$step")
-    fi
-done
-
-if [ ${#failed_steps[@]} -ne 0 ]; then
-    echo "The following steps failed: ${failed_steps[@]}"
-    exit 1
-else
-    echo "All steps completed successfully!"
-fi
+mlflow run . -e data_validation --env-manager=local -P run_name="Data Validation"
+mlflow run . -e preprocessing --env-manager=local -P run_name="Preprocessing"
+mlflow run . -e feature_engineering --env-manager=local -P run_name="Feature Engineering"
+mlflow run . -e hyperparameter_tuning --env-manager=local -P run_name="Hyperparameter Tuning"
+mlflow run . -e training --env-manager=local -P run_name="Training"
+mlflow run . -e evaluation --env-manager=local -P run_name="Evaluation"
