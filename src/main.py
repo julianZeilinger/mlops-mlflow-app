@@ -8,6 +8,10 @@ from evaluate import evaluate_model
 
 
 def main():
+    if mlflow.active_run():
+        print(f"Ending stale run: {mlflow.active_run().info.run_id}")
+        mlflow.end_run()
+        
     with mlflow.start_run(run_name="Full Pipeline") as parent_run:
         # Step 1: Data Validation
         with mlflow.start_run(nested=True, run_name="Data Validation"):
