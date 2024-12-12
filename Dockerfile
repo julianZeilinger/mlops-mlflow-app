@@ -14,8 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN echo $PATH && which dvc && which mlflow
 
-RUN dvc pull
-
 # Copy the application code
 COPY . /app
 WORKDIR /app
