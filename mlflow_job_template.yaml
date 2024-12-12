@@ -12,7 +12,7 @@ spec:
       containers:
         - name: "{replaced with MLflow Project name}"
           image: "{replaced with URI of Docker image created during Project execution}"
-          command: ["{replaced with MLflow Project entry point command}"]
+          command: []
           env: []
           resources:
             limits:
