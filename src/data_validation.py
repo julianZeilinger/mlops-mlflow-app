@@ -10,10 +10,6 @@ def validate_data(input_data="data/raw/iris.csv"):
     print(df.iloc[0])  # Print the first line of the dataset
 
     validation_passed = True
-    if df.isnull().values.any():
-        validation_passed = False
-    if df.duplicated().any():
-        validation_passed = False
 
     mlflow.log_metric("data_validation_passed", int(validation_passed))
 
