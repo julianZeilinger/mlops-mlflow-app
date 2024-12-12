@@ -7,10 +7,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import os
 
-
-@click.command()
-@click.option("--input-data", type=str, required=True, help="Path to feature data")
-@click.option("--best-params", type=str, required=True, help="Path to best parameters file")
 def train_model(input_data, best_params):
     with mlflow.start_run(run_name="Training"):
         # Load data and parameters
@@ -32,7 +28,3 @@ def train_model(input_data, best_params):
         joblib.dump(model, model_path)
         mlflow.log_artifact(model_path, artifact_path="models")
         mlflow.sklearn.log_model(model, artifact_path="model")
-
-
-if __name__ == "__main__":
-    train_model()

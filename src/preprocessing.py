@@ -4,8 +4,6 @@ import click
 import os
 
 
-@click.command()
-@click.option("--input-data", type=str, required=True, help="Path to validated data")
 def preprocess_data(input_data):
     with mlflow.start_run(run_name="Preprocessing"):
         # Load and preprocess data

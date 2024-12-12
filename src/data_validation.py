@@ -3,9 +3,7 @@ import mlflow
 import click
 
 
-@click.command()
-@click.option("--input-data", type=str, default="data/raw/iris.csv", help="Input dataset path")
-def validate_data(input_data):
+def validate_data(input_data="data/raw/iris.csv"):
     with mlflow.start_run(run_name="Data Validation"):
         # Read and validate data
         print(f"Validating data from: {input_data}")
@@ -27,7 +25,3 @@ def validate_data(input_data):
         validated_data_path = "validated_data.csv"
         df.to_csv(validated_data_path, index=False)
         mlflow.log_artifact(validated_data_path, artifact_path="validated_data")
-
-
-if __name__ == "__main__":
-    validate_data()

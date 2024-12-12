@@ -6,10 +6,6 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 import os
 
-
-@click.command()
-@click.option("--input-data", type=str, required=True, help="Path to feature data")
-@click.option("--param-grid", type=str, default="param_grid.yaml", help="Path to parameter grid file")
 def hyperparameter_tuning(input_data, param_grid):
     with mlflow.start_run(run_name="Hyperparameter Tuning"):
         # Load data
@@ -35,7 +31,3 @@ def hyperparameter_tuning(input_data, param_grid):
         with open(best_params_path, "w") as f:
             yaml.dump(best_params, f)
         mlflow.log_artifact(best_params_path, artifact_path="params")
-
-
-if __name__ == "__main__":
-    hyperparameter_tuning()

@@ -3,9 +3,6 @@ import mlflow
 import click
 import os
 
-
-@click.command()
-@click.option("--input-data", type=str, required=True, help="Path to processed data")
 def engineer_features(input_data):
     with mlflow.start_run(run_name="Feature Engineering"):
         # Load data and engineer features
@@ -18,7 +15,3 @@ def engineer_features(input_data):
         feature_data_path = "features/iris_features.csv"
         df.to_csv(feature_data_path, index=False)
         mlflow.log_artifact(feature_data_path, artifact_path="features")
-
-
-if __name__ == "__main__":
-    engineer_features()
