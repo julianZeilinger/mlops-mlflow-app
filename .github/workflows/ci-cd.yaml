@@ -55,8 +55,6 @@ jobs:
 
       - name: Run MLflow Project on Kubernetes
         env:
-          MLFLOW_TRACKING_URI: http://localhost:5000
-          MLFLOW_TRACKING_USERNAME: admin
-          MLFLOW_TRACKING_PASSWORD: admin
+          MLFLOW_TRACKING_URI: http://admin:admin@localhost:5000
         run: |
           mlflow run . --backend kubernetes --backend-config backend-config.json
