@@ -11,8 +11,9 @@ def main():
     if mlflow.active_run():
         print(f"Ending stale run: {mlflow.active_run().info.run_id}")
         mlflow.end_run()
-        
+
     with mlflow.start_run(run_name="Full Pipeline") as parent_run:
+        print(f"Parent run ID: {parent_run.info.run_id}")
         # Step 1: Data Validation
         with mlflow.start_run(nested=True, run_name="Data Validation"):
             validate_data("data/raw/iris.csv")
