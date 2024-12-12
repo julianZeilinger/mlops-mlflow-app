@@ -1,0 +1,6 @@
+mlflow
+dvc[s3]
+scikit-learn
+pandas
+joblib
+PyYAML

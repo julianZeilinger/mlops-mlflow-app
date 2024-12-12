@@ -1,0 +1,8 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://dvc-bucket
+    endpointurl = http://128.130.194.231
+    access_key_id = VzKqqPTjYFGfOS3TaFuz
+    secret_access_key = Hs9uJYgF5LwPP3RuLI21PohYGKKIll4JducVlRuD
+    use_ssl = false

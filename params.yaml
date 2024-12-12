@@ -1,0 +1,12 @@
+preprocessing: {}
+
+feature_engineering: {}
+
+hyperparameter_tuning:
+  param_grid:
+    n_estimators: [50, 100]
+    max_depth: [2, 5, None]
+
+training: {}
+
+evaluation: {}
