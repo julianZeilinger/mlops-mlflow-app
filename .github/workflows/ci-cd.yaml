@@ -46,7 +46,7 @@ jobs:
       - name: Run MLflow Project on Kubernetes
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-          MLFLOW_TRACKING_URI: http://mlflow-tracking.mlflow.svc.cluster.local:5000
+          MLFLOW_TRACKING_URI: http://128.130.194.92:80
         run: |
           echo "${KUBECONFIG}" | base64 --decode > kubeconfig.yaml
           cat kubeconfig.yaml
