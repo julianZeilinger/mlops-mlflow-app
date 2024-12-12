@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mlflow-job-template
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: mlflow-runner
+          image: python:3.9-slim
+          command: ["sh", "-c", "echo 'Running MLflow job...'"]
+          env:
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-tracking.mlflow.svc.cluster.local:5000"

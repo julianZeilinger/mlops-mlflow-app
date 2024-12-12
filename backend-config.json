@@ -1,4 +1,5 @@
 {
   "kube-context": "mlops-test-admin@mlops-test",
+  "kube-job-template-path": "mlflow_job_template.yaml",
   "kube-namespace": "mlflow"
 }
