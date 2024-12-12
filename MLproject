@@ -6,6 +6,7 @@ docker_env:
 entry_points:
   main:
     command: |
+      ls -la &&
       dvc pull &&
       mlflow run . -e data_validation &&
       mlflow run . -e preprocessing &&

@@ -3,8 +3,9 @@ import mlflow
 
 def validate_data():
     df = pd.read_csv('data/raw/iris.csv')
+    print(df.iloc[0])  # Print the first line of the dataset
     validation_passed = True
-
+    
     # Check for missing values
     if df.isnull().values.any():
         validation_passed = False
