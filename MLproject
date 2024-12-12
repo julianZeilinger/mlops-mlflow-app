@@ -5,7 +5,7 @@ docker_env:
 
 entry_points:
   main:
-    command: '/bin/bash -c "which mlflow"'
+    command: "ls && ls src"
 
   data_validation:
     command: "python src/data_validation.py"
