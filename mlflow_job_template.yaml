@@ -13,7 +13,13 @@ spec:
         - name: "{replaced with MLflow Project name}"
           image: "{replaced with URI of Docker image created during Project execution}"
           command: []
-          env: []
+          env:
+            - name: KUBE_MLFLOW_TRACKING_URI
+              value: "http://mlflow-tracking.mlflow.svc.cluster.local:5000"
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-tracking.mlflow.svc.cluster.local:5000"
+            - name: MLFLOW_S3_ENDPOINT_URL
+              value: "http://mlflow-minio.mlflow.svc.cluster.local:80"
           resources:
             limits:
               memory: 512Mi
