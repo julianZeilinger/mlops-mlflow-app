@@ -5,14 +5,14 @@ docker_env:
 
 entry_points:
   main:
-    command: |
-      dvc pull &&
+    command: >
+      bash -c "dvc pull &&
       mlflow run . -e data_validation &&
       mlflow run . -e preprocessing &&
       mlflow run . -e feature_engineering &&
       mlflow run . -e hyperparameter_tuning &&
       mlflow run . -e training &&
-      mlflow run . -e evaluation
+      mlflow run . -e evaluation"
 
   data_validation:
     command: "python src/data_validation.py"
