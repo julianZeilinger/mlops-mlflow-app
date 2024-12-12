@@ -5,7 +5,7 @@ docker_env:
 
 entry_points:
   main:
-    command: '/bin/bash -c "dvc --version && mlflow --version"'
+    command: '/bin/bash -c "ls"'
 
   data_validation:
     command: "python src/data_validation.py"
