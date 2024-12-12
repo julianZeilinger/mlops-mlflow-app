@@ -9,38 +9,38 @@ from evaluate import evaluate_model
 
 def main():
     print("MLflow Version:", mlflow.version.VERSION)
-    mlflow.set_tracking_uri("http://mlflow-tracking.mlflow.svc.cluster.local:5000")
+    # mlflow.set_tracking_uri("http://mlflow-tracking.mlflow.svc.cluster.local:5000")
     print(mlflow.get_tracking_uri())
     print(mlflow.active_run())
-    if mlflow.active_run():
-        print(f"Ending stale run: {mlflow.active_run().info.run_id}")
-        mlflow.end_run()
+    # if mlflow.active_run():
+    #     print(f"Ending stale run: {mlflow.active_run().info.run_id}")
+    #     mlflow.end_run()
 
-    with mlflow.start_run(run_name="Full Pipeline") as parent_run:
-        print(f"Parent run ID: {parent_run.info.run_id}")
-        # Step 1: Data Validation
-        with mlflow.start_run(nested=True, run_name="Data Validation"):
-            validate_data("data/raw/iris.csv")
+    # with mlflow.start_run(run_name="Full Pipeline") as parent_run:
+    #     print(f"Parent run ID: {parent_run.info.run_id}")
+    #     # Step 1: Data Validation
+    #     with mlflow.start_run(nested=True, run_name="Data Validation"):
+    #         validate_data("data/raw/iris.csv")
         
-        # Step 2: Preprocessing
-        with mlflow.start_run(nested=True, run_name="Preprocessing"):
-            preprocess_data("validated_data.csv")
+    #     # Step 2: Preprocessing
+    #     with mlflow.start_run(nested=True, run_name="Preprocessing"):
+    #         preprocess_data("validated_data.csv")
         
-        # Step 3: Feature Engineering
-        with mlflow.start_run(nested=True, run_name="Feature Engineering"):
-            engineer_features("processed_data/iris_processed.csv")
+    #     # Step 3: Feature Engineering
+    #     with mlflow.start_run(nested=True, run_name="Feature Engineering"):
+    #         engineer_features("processed_data/iris_processed.csv")
         
-        # Step 4: Hyperparameter Tuning
-        with mlflow.start_run(nested=True, run_name="Hyperparameter Tuning"):
-            hyperparameter_tuning("features/iris_features.csv", "param_grid.yaml")
+    #     # Step 4: Hyperparameter Tuning
+    #     with mlflow.start_run(nested=True, run_name="Hyperparameter Tuning"):
+    #         hyperparameter_tuning("features/iris_features.csv", "param_grid.yaml")
         
-        # Step 5: Training
-        with mlflow.start_run(nested=True, run_name="Training"):
-            train_model("features/iris_features.csv", "params/best_params.yaml")
+    #     # Step 5: Training
+    #     with mlflow.start_run(nested=True, run_name="Training"):
+    #         train_model("features/iris_features.csv", "params/best_params.yaml")
         
-        # Step 6: Evaluation
-        with mlflow.start_run(nested=True, run_name="Evaluation"):
-            evaluate_model("models/model.joblib", "features/iris_features.csv")
+    #     # Step 6: Evaluation
+    #     with mlflow.start_run(nested=True, run_name="Evaluation"):
+    #         evaluate_model("models/model.joblib", "features/iris_features.csv")
 
 
 if __name__ == "__main__":
