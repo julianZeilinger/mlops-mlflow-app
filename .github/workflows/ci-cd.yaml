@@ -18,16 +18,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: "3.8"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
 
-      # - name: Install Dependencies
-      #   run: pip install -r requirements.txt
-
-      # - name: Install DVC
-      #   run: pip install dvc[s3]
+      - name: Install Dependencies
+        run: pip install mlflow
 
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
