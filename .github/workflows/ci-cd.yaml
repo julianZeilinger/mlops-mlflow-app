@@ -43,16 +43,13 @@ jobs:
           docker build -t julianzeilinger/mlflow-test:latest .
           docker push julianzeilinger/mlflow-test:latest
 
-      - name: Configure Kubernetes Access
+      - name: Configure Kubernetes Access and Port Forwarding
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         run: |
           echo "${KUBECONFIG}" | base64 --decode > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl get pods -n mlflow
-
-      - name: Port Forward MLflow Tracking Server
-        run: |
           kubectl port-forward svc/mlflow-tracking -n mlflow 5000:5000 &
           sleep 5 # Ensure port forwarding is active
 
