@@ -8,6 +8,7 @@ import click
 def validate_data(input_data):
     with mlflow.start_run(run_name="Data Validation"):
         # Read and validate data
+        print(f"Validating data from: {input_data}")
         df = pd.read_csv(input_data)
         print(df.iloc[0])  # Print the first line of the dataset
 
