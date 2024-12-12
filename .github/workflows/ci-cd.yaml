@@ -18,16 +18,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.8"
 
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
+      # - name: Install Dependencies
+      #   run: pip install -r requirements.txt
 
-      - name: Install DVC
-        run: pip install dvc[s3]
+      # - name: Install DVC
+      #   run: pip install dvc[s3]
 
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -36,8 +36,8 @@ jobs:
       #     aws-secret-access-key: Hs9uJYgF5LwPP3RuLI21PohYGKKIll4JducVlRuD
       #     aws-region: us-east-1
 
-      - name: Pull Data with DVC
-        run: dvc pull
+      # - name: Pull Data with DVC
+      #   run: dvc pull
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
