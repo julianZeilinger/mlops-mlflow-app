@@ -46,15 +46,11 @@ jobs:
       - name: Configure Kubernetes Access and Port Forwarding
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+          MLFLOW_TRACKING_URI: http://admin:admin@localhost:5000
         run: |
           echo "${KUBECONFIG}" | base64 --decode > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl get svc -n mlflow
           kubectl port-forward svc/mlflow-tracking -n mlflow 5000:80 &
           sleep 5 # Ensure port forwarding is active
-
-      - name: Run MLflow Project on Kubernetes
-        env:
-          MLFLOW_TRACKING_URI: http://admin:admin@localhost:5000
-        run: |
           mlflow run . --backend kubernetes --backend-config backend-config.json
