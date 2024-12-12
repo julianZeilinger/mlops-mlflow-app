@@ -26,13 +26,6 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: VzKqqPTjYFGfOS3TaFuz
-      #     aws-secret-access-key: Hs9uJYgF5LwPP3RuLI21PohYGKKIll4JducVlRuD
-      #     aws-region: us-east-1
-
       # - name: Pull Data with DVC
       #   run: dvc pull
 

@@ -1,60 +1,38 @@
-import os
 import mlflow
-from click import command, option
-from mlflow.tracking import MlflowClient
+from data_validation import validate_data
+from preprocessing import preprocess_data
+from feature_engineering import engineer_features
+from hyperparameter_tuning import hyperparameter_tuning
+from train import train_model
+from evaluate import evaluate_model
 
 
-def _get_or_run(entry_point, parameters):
-    """
-    Launches an MLflow run or reuses a cached run if one exists with the same parameters.
-    """
-    client = MlflowClient()
-    existing_run = None
-    for run in client.search_runs(experiment_ids=["0"], order_by=["start_time desc"]):
-        if run.data.tags.get("mlflow.project.entryPoint") == entry_point:
-            if all(run.data.params.get(k) == str(v) for k, v in parameters.items()):
-                existing_run = run
-                break
-    if existing_run:
-        print(f"Using cached run for {entry_point} with parameters {parameters}")
-        return existing_run
-
-    print(f"Starting new run for {entry_point} with parameters {parameters}")
-    return mlflow.run(".", entry_point, parameters=parameters, env_manager="local")
-
-
-@command()
-def workflow():
-    """
-    Orchestrates the ML pipeline.
-    """
-    # Step 1: Data validation
-    validation_run = _get_or_run("data_validation", {"input_data": "data/raw/iris.csv"})
-    validated_data_uri = os.path.join(validation_run.info.artifact_uri, "validated_data.csv")
-
-    # Step 2: Preprocessing
-    preprocessing_run = _get_or_run("preprocessing", {"input_data": validated_data_uri})
-    processed_data_uri = os.path.join(preprocessing_run.info.artifact_uri, "processed_data/iris_processed.csv")
-
-    # Step 3: Feature Engineering
-    feature_engineering_run = _get_or_run("feature_engineering", {"input_data": processed_data_uri})
-    feature_data_uri = os.path.join(feature_engineering_run.info.artifact_uri, "features/iris_features.csv")
-
-    # Step 4: Hyperparameter Tuning
-    hyperparameter_tuning_run = _get_or_run(
-        "hyperparameter_tuning", {"input_data": feature_data_uri, "param_grid": "param_grid.yaml"}
-    )
-    best_params_uri = os.path.join(hyperparameter_tuning_run.info.artifact_uri, "params/best_params.yaml")
-
-    # Step 5: Training
-    training_run = _get_or_run(
-        "training", {"input_data": feature_data_uri, "best_params": best_params_uri}
-    )
-    model_uri = os.path.join(training_run.info.artifact_uri, "models/model.joblib")
-
-    # Step 6: Evaluation
-    _get_or_run("evaluation", {"model_path": model_uri, "test_data": feature_data_uri})
+def main():
+    with mlflow.start_run(run_name="Full Pipeline") as parent_run:
+        # Step 1: Data Validation
+        with mlflow.start_run(nested=True, run_name="Data Validation"):
+            validate_data("data/raw/iris.csv")
+        
+        # Step 2: Preprocessing
+        with mlflow.start_run(nested=True, run_name="Preprocessing"):
+            preprocess_data("validated_data.csv")
+        
+        # Step 3: Feature Engineering
+        with mlflow.start_run(nested=True, run_name="Feature Engineering"):
+            engineer_features("processed_data/iris_processed.csv")
+        
+        # Step 4: Hyperparameter Tuning
+        with mlflow.start_run(nested=True, run_name="Hyperparameter Tuning"):
+            hyperparameter_tuning("features/iris_features.csv", "param_grid.yaml")
+        
+        # Step 5: Training
+        with mlflow.start_run(nested=True, run_name="Training"):
+            train_model("features/iris_features.csv", "params/best_params.yaml")
+        
+        # Step 6: Evaluation
+        with mlflow.start_run(nested=True, run_name="Evaluation"):
+            evaluate_model("models/model.joblib", "features/iris_features.csv")
 
 
 if __name__ == "__main__":
-    workflow()
+    main()
