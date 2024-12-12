@@ -1,16 +1,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mlflow-job-template
+  name: "{replaced with MLflow Project name}"
+  namespace: mlflow
 spec:
+  ttlSecondsAfterFinished: 100
   backoffLimit: 0
   template:
     spec:
-      restartPolicy: Never
       containers:
-        - name: mlflow-runner
-          image: python:3.9-slim
-          command: ["sh", "-c", "echo 'Running MLflow job...'"]
+        - name: "{replaced with MLflow Project name}"
+          image: "{replaced with URI of Docker image created during Project execution}"
+          command: ["{replaced with MLflow Project entry point command}"]
           env:
-            - name: MLFLOW_TRACKING_URI
-              value: "http://mlflow-tracking.mlflow.svc.cluster.local:5000"
+            [
+              "{appended with MLFLOW_TRACKING_URI, MLFLOW_RUN_ID and MLFLOW_EXPERIMENT_ID}",
+            ]
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 256Mi
+      restartPolicy: Never
