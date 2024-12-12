@@ -1,5 +1,8 @@
 name: mlflow_pipeline
 
+docker_env:
+  image: "julianzeilinger/mlflow-test:latest"
+
 entry_points:
   main:
     command: "python main.py"
