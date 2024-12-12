@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install DVC
-RUN pip install --no-cache-dir dvc[s3]
+RUN echo $PATH && which dvc && which mlflow
 
 # Copy the application code
 COPY . /app
