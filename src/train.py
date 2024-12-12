@@ -1,33 +1,38 @@
 import pandas as pd
-import yaml
 import mlflow
 import mlflow.sklearn
+import click
+import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import joblib
 import os
 
-def train_model(params):
-    df = pd.read_csv('data/features/iris_features.csv')
-    X = df.drop('species', axis=1)
-    y = df['species']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+@click.command()
+@click.option("--input-data", type=str, required=True, help="Path to feature data")
+@click.option("--best-params", type=str, required=True, help="Path to best parameters file")
+def train_model(input_data, best_params):
+    with mlflow.start_run(run_name="Training"):
+        # Load data and parameters
+        df = pd.read_csv(input_data)
+        with open(best_params, "r") as f:
+            params = yaml.safe_load(f)
 
-    model = RandomForestClassifier(**params, random_state=42)
-    model.fit(X_train, y_train)
+        X = df.drop("species", axis=1)
+        y = df["species"]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Save the model
-    os.makedirs('models', exist_ok=True)
-    model_path = 'models/model.joblib'
-    joblib.dump(model, model_path)
-    mlflow.log_artifact(model_path)
+        # Train model
+        model = RandomForestClassifier(**params, random_state=42)
+        model.fit(X_train, y_train)
 
-    # Log the model with MLflow
-    mlflow.sklearn.log_model(model, artifact_path="model")
+        # Save and log model
+        os.makedirs("models", exist_ok=True)
+        model_path = "models/model.joblib"
+        joblib.dump(model, model_path)
+        mlflow.log_artifact(model_path, artifact_path="models")
+        mlflow.sklearn.log_model(model, artifact_path="model")
+
 
 if __name__ == "__main__":
-    with open("params/best_params.yaml") as f:
-        params = yaml.safe_load(f)['training']
-    with mlflow.start_run(run_name="Training"):
-        train_model(params)
+    train_model()

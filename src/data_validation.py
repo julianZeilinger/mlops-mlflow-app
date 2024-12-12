@@ -1,24 +1,32 @@
 import pandas as pd
 import mlflow
+import click
 
-def validate_data():
-    df = pd.read_csv('data/raw/iris.csv')
-    print(df.iloc[0])  # Print the first line of the dataset
-    validation_passed = True
-    
-    # Check for missing values
-    if df.isnull().values.any():
-        validation_passed = False
 
-    # Check for duplicates
-    if df.duplicated().any():
-        validation_passed = False
+@click.command()
+@click.option("--input-data", type=str, default="data/raw/iris.csv", help="Input dataset path")
+def validate_data(input_data):
+    with mlflow.start_run(run_name="Data Validation"):
+        # Read and validate data
+        df = pd.read_csv(input_data)
+        print(df.iloc[0])  # Print the first line of the dataset
 
-    mlflow.log_metric("data_validation_passed", int(validation_passed))
+        validation_passed = True
+        if df.isnull().values.any():
+            validation_passed = False
+        if df.duplicated().any():
+            validation_passed = False
 
-    if not validation_passed:
-        raise ValueError("Data validation failed.")
+        mlflow.log_metric("data_validation_passed", int(validation_passed))
+
+        if not validation_passed:
+            raise ValueError("Data validation failed.")
+
+        # Save validated data
+        validated_data_path = "validated_data.csv"
+        df.to_csv(validated_data_path, index=False)
+        mlflow.log_artifact(validated_data_path, artifact_path="validated_data")
+
 
 if __name__ == "__main__":
-    with mlflow.start_run(run_name="Data Validation"):
-        validate_data()
+    validate_data()

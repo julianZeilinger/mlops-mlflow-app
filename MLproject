@@ -1,26 +1,17 @@
-name: mlflow-test
-
-docker_env:
-  image: julianzeilinger/mlflow-test:latest
+name: mlflow_pipeline
 
 entry_points:
   main:
-    command: "bash run_pipeline.sh"
-
+    command: "python main.py"
   data_validation:
-    command: "python src/data_validation.py"
-
+    command: "python src/data_validation.py --input-data {input_data}"
   preprocessing:
-    command: "python src/preprocessing.py"
-
+    command: "python src/preprocessing.py --input-data {input_data}"
   feature_engineering:
-    command: "python src/feature_engineering.py"
-
+    command: "python src/feature_engineering.py --input-data {input_data}"
   hyperparameter_tuning:
-    command: "python src/hyperparameter_tuning.py"
-
+    command: "python src/hyperparameter_tuning.py --input-data {input_data} --param-grid {param_grid}"
   training:
-    command: "python src/train.py"
-
+    command: "python src/train.py --input-data {input_data} --best-params {best_params}"
   evaluation:
-    command: "python src/evaluate.py"
+    command: "python src/evaluation.py --model-path {model_path} --test-data {test_data}"

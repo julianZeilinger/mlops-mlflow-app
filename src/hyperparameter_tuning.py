@@ -1,31 +1,41 @@
+import pandas as pd
 import yaml
 import mlflow
+import click
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-import pandas as pd
 import os
 
-def hyperparameter_tuning(params):
-    df = pd.read_csv('data/features/iris_features.csv')
-    X = df.drop('species', axis=1)
-    y = df['species']
 
-    param_grid = params['param_grid']
+@click.command()
+@click.option("--input-data", type=str, required=True, help="Path to feature data")
+@click.option("--param-grid", type=str, default="param_grid.yaml", help="Path to parameter grid file")
+def hyperparameter_tuning(input_data, param_grid):
+    with mlflow.start_run(run_name="Hyperparameter Tuning"):
+        # Load data
+        df = pd.read_csv(input_data)
+        X = df.drop("species", axis=1)
+        y = df["species"]
 
-    model = RandomForestClassifier(random_state=42)
-    grid_search = GridSearchCV(model, param_grid, cv=3)
-    grid_search.fit(X, y)
+        # Load parameter grid
+        with open(param_grid, "r") as f:
+            param_grid = yaml.safe_load(f)
 
-    best_params = grid_search.best_params_
-    mlflow.log_params(best_params)
+        # Perform grid search
+        model = RandomForestClassifier(random_state=42)
+        grid_search = GridSearchCV(model, param_grid, cv=3)
+        grid_search.fit(X, y)
 
-    # Save best parameters
-    os.makedirs('params', exist_ok=True)
-    with open('params/best_params.yaml', 'w') as f:
-        yaml.dump({'training': best_params}, f)
+        best_params = grid_search.best_params_
+        mlflow.log_params(best_params)
+
+        # Save best parameters
+        os.makedirs("params", exist_ok=True)
+        best_params_path = "params/best_params.yaml"
+        with open(best_params_path, "w") as f:
+            yaml.dump(best_params, f)
+        mlflow.log_artifact(best_params_path, artifact_path="params")
+
 
 if __name__ == "__main__":
-    with open("params.yaml") as f:
-        params = yaml.safe_load(f)['hyperparameter_tuning']
-    with mlflow.start_run(run_name="Hyperparameter Tuning"):
-        hyperparameter_tuning(params)
+    hyperparameter_tuning()

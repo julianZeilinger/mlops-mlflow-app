@@ -57,4 +57,4 @@ jobs:
           echo "${KUBECONFIG}" | base64 --decode > kubeconfig.yaml
           cat kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
-          mlflow run . --backend kubernetes --backend-config backend-config.json --env-manager=local
+          mlflow run . --backend kubernetes --backend-config backend-config.json

@@ -1,20 +1,24 @@
 import pandas as pd
-import yaml
 import mlflow
+import click
 import os
 
-def engineer_features(params):
-    df = pd.read_csv('data/processed/iris_processed.csv')
-    # Example feature engineering: add a new feature
-    df['sepal_area'] = df['sepal_length'] * df['sepal_width']
-    df['petal_area'] = df['petal_length'] * df['petal_width']
 
-    os.makedirs('data/features', exist_ok=True)
-    df.to_csv('data/features/iris_features.csv', index=False)
-    mlflow.log_artifact('data/features/iris_features.csv')
+@click.command()
+@click.option("--input-data", type=str, required=True, help="Path to processed data")
+def engineer_features(input_data):
+    with mlflow.start_run(run_name="Feature Engineering"):
+        # Load data and engineer features
+        df = pd.read_csv(input_data)
+        df["sepal_area"] = df["sepal_length"] * df["sepal_width"]
+        df["petal_area"] = df["petal_length"] * df["petal_width"]
+
+        # Save feature data
+        os.makedirs("features", exist_ok=True)
+        feature_data_path = "features/iris_features.csv"
+        df.to_csv(feature_data_path, index=False)
+        mlflow.log_artifact(feature_data_path, artifact_path="features")
+
 
 if __name__ == "__main__":
-    with open("params.yaml") as f:
-        params = yaml.safe_load(f)['feature_engineering']
-    with mlflow.start_run(run_name="Feature Engineering"):
-        engineer_features(params)
+    engineer_features()
