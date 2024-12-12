@@ -1,0 +1,2 @@
+kube-context: "mlops-test-admin@mlops-test"
+kube-namespace: "mlflow"
