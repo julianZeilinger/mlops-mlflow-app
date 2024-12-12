@@ -9,6 +9,7 @@ from evaluate import evaluate_model
 
 def main():
     print("MLflow Version:", mlflow.version.VERSION)
+    mlflow.set_tracking_uri("http://mlflow-tracking.mlflow.svc.cluster.local:5000")
     print(mlflow.get_tracking_uri())
     print(mlflow.active_run())
     if mlflow.active_run():
