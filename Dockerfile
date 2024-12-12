@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libffi-dev \
     libssl-dev \
     bash \
+    git \
+    docker.io \
     && rm -rf /var/lib/apt/lists/*
 # Install dependencies
 COPY requirements.txt .
