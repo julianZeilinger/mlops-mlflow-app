@@ -50,7 +50,7 @@ jobs:
           echo "${KUBECONFIG}" | base64 --decode > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl get svc -n mlflow
-          kubectl port-forward svc/mlflow-tracking -n mlflow 5000:5000 &
+          kubectl port-forward svc/mlflow-tracking -n mlflow 5000:80 &
           sleep 5 # Ensure port forwarding is active
 
       - name: Run MLflow Project on Kubernetes
