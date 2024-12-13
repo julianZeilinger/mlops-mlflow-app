@@ -2,6 +2,7 @@ import pandas as pd
 import mlflow
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
+import os
 
 def evaluate_model(model_path, test_data_path):
     # Load model

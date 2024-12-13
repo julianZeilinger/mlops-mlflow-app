@@ -6,7 +6,7 @@ on:
     paths:
       - "src/**"
       - "data/**"
-      - "params.yaml"
+      - "param_grid.yaml"
       - "MLproject"
       - "requirements.txt"
   workflow_dispatch:
