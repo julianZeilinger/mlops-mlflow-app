@@ -1,16 +1,17 @@
 import pandas as pd
 import mlflow
-import click
 import os
 
 def engineer_features(input_data):
-    # Load data and engineer features
+    # Load data
     df = pd.read_csv(input_data)
-    df["sepal_area"] = df["sepal_length"] * df["sepal_width"]
-    df["petal_area"] = df["petal_length"] * df["petal_width"]
-
+    
+    # Create new features
+    df["sepal.area"] = df["sepal.length"] * df["sepal.width"]
+    df["petal.area"] = df["petal.length"] * df["petal.width"]
+    
     # Save feature data
-    os.makedirs("features", exist_ok=True)
     feature_data_path = "features/iris_features.csv"
+    os.makedirs("features", exist_ok=True)
     df.to_csv(feature_data_path, index=False)
     mlflow.log_artifact(feature_data_path, artifact_path="features")
